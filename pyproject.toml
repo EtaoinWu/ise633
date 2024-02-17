@@ -3,8 +3,8 @@ name = "ise633" # Required
 version = "0.0.1" # Required
 requires-python = ">=3.12"
 
-[project.optional-dependencies] # Optional
-dev = ["ruff", "pyright", "mypy"]
+[project.optional-dependencies]
+dev = ["ruff", "nbqa", "isort", "pyright", "mypy"]
 test = ["pytest"]
 
 [tool.pytest.ini_options]
