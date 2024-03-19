@@ -1,6 +1,6 @@
 from typing import Literal
 
-PLOT_MODE_T = Literal["svg"] | Literal["widget"]
+PLOT_MODE_T = Literal["svg"] | Literal["widget"] | Literal["png"]
 
 plot_mode: PLOT_MODE_T | None = None
 
@@ -29,10 +29,10 @@ def init_matplotlib(mode: PLOT_MODE_T | None = None):
     if ipython is None:
         raise RuntimeError("Not in a notebook!")
     mode = auto_mode(mode)
-    if mode == "svg":
+    if mode == "svg" or mode == "png":
         import matplotlib_inline
 
         ipython.run_line_magic("matplotlib", "inline")
-        matplotlib_inline.backend_inline.set_matplotlib_formats("svg")
+        matplotlib_inline.backend_inline.set_matplotlib_formats(mode)
     elif mode == "widget":
         ipython.run_line_magic("matplotlib", "widget")
