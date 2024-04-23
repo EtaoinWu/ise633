@@ -45,7 +45,9 @@ def nfold_cross_validation_trains(
     # assert 0 <= i < n, f"i={i} must be in [0, {n})"
     slices = jnp.reshape(x, (1, n, -1, *x.shape[1:]))
     duped = jnp.repeat(slices, n, axis=0)
-    rolls = jax.vmap(jnp.roll, in_axes=(0, 0, None))(duped, -jnp.arange(n), 0)
+    rolls = jax.vmap(jnp.roll, in_axes=(0, 0, None))(
+        duped, -jnp.arange(n), 0
+    )
     popped = rolls[:, 1:, ...]
     return jnp.reshape(popped, (n, -1, *x.shape[1:]))
 
@@ -65,7 +67,9 @@ def nfold_cross_validation_tests(
 def tree_nfold_cross_validation_trains(
     n: IntLike,
     x: PyTree[Shaped[Array, " d *?moredims"], " TreeStruct"],
-) -> PyTree[Shaped[Array, " {n} d/{n}*{n-1} *?moredims"], " TreeStruct"]:
+) -> PyTree[
+    Shaped[Array, " {n} d/{n}*{n-1} *?moredims"], " TreeStruct"
+]:
     return jtu.tree_map(
         lambda v: nfold_cross_validation_trains(n, v), x
     )
@@ -76,6 +80,4 @@ def tree_nfold_cross_validation_tests(
     n: IntLike,
     x: PyTree[Shaped[Array, " d *?moredims"], " TreeStruct"],
 ) -> PyTree[Shaped[Array, " {n} d/{n} *?moredims"], " TreeStruct"]:
-    return jtu.tree_map(
-        lambda v: nfold_cross_validation_tests(n, v), x
-    )
+    return jtu.tree_map(lambda v: nfold_cross_validation_tests(n, v), x)
